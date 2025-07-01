@@ -1,4 +1,11 @@
 import Link from 'next/link'
+import { Roboto,Inter,Montserrat } from 'next/font/google'
+ 
+const inter = Montserrat({
+  weight: '400',
+  subsets: ['latin'],
+})
+
 
 const websiteLinks = [
     { name: 'Home', href: '/' },
@@ -14,8 +21,10 @@ const websiteLinks1 = [
 export default function HomeNavbar() {
 
     return (
-        <div className='relative w-full h-[120px] bg-[#141414] overflow-hidden'>
-            <div className='absolute text-[18px] text-white-700 w-auto left-[24px] top-[44px] uppercase font-bold'>
+        <div className={`relative w-full h-[120px] bg-[#ffffff] text-gray-800 text-[14px] overflow-hidden ${inter.className}`} 
+        style={{background: "linear-gradient(90deg, #3B41C5 0%, #A981BB 49%, #FFC8A9 100%)"}}
+        >
+            <div className='absolute  w-auto left-[24px] top-[44px] uppercase font-bold'>
                     <Link
                         key={'/'}
                         href={'/'}
@@ -23,7 +32,7 @@ export default function HomeNavbar() {
                         LOGO
                     </Link>
             </div>
-            <div className='text-[18px] text-white-700 w-[300px] mx-auto mt-[44px] flex justify-between uppercase font-bold hidden md:flex'>
+            <div className=' w-[300px] mx-auto mt-[44px] flex justify-between uppercase font-bold hidden md:flex'>
                 {websiteLinks.map((link) => (
                     <Link
                         key={link.href}
@@ -33,7 +42,7 @@ export default function HomeNavbar() {
                     </Link>
                 ))}
             </div>
-            <div className='absolute text-[18px] text-white-700 w-[160px] right-[24px] top-[44px] flex justify-between uppercase font-bold'>
+            <div className='absolute  w-[160px] right-[24px] top-[44px] flex justify-between uppercase font-bold'>
                 {websiteLinks1.map((link) => (
                     <Link
                         key={link.href}

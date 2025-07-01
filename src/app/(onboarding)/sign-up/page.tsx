@@ -1,20 +1,20 @@
 import Image from "next/image";
+import HomeNavbar from "@/components/layout/homeNavbar";
 
 export default function SignUp() {
   return (
-    <div>
-      <div className="relative h-screen w-full bg-[#E0E0E0] overflow-hidden">
-        <h1 className="text-gray-700 text-center mt-[120px] font-bold">Sign Up to Our Chat App</h1>
-        <div className="w-[420px] h-[300px] shadow-md mx-auto mt-[20px] text-gray-900  rounded overflow-hidden">
-        <input className=" block border-1 border-black w-[180px] mx-auto mt-[40px] rounded" type="text" name="name" value={"Full Name"} />
-          <input className=" block border-1 border-black w-[180px] mx-auto mt-[10px] rounded" type="text" name="username" value={"username"} />
-          <input className=" block border-1 border-black w-[180px] mx-auto mt-[10px] rounded" type="email" name="email" />
-          <input className=" block border-1 border-black w-[180px] mx-auto mt-[10px] rounded" type="password" name="password" value={"abcd"} />
-          <input className=" block border-1 border-black w-[180px] mx-auto mt-[10px] rounded" type="password" name="confirm-password" value={"abcd"} />
-          <button className=" block border-1 border-black w-[180px] mx-auto mt-[10px] rounded bg-black text-white">
-            Sign Up
-          </button>
-        </div>
+    <div className="relative h-screen w-full bg-[#FFFFFF] overflow-hidden"
+    style={{background: "linear-gradient(90deg, #3B41C5 0%, #A981BB 49%, #FFC8A9 100%)"}}
+    >
+      <HomeNavbar/>
+      <h1 className="text-gray-700 text-center mt-[120px] mb-[60px] font-bold text-3xl">Sign Up to Our Chat App</h1>
+      <div className="w-[420px] h-auto shadow-md mx-auto mt-[20px] text-gray-900  rounded overflow-hidden">
+        <input className="input-field mt-[40px]" type="text" name="name" placeholder="Full Name" />
+        <input className="input-field" type="text" name="username" placeholder="Username" />
+        <input className="input-field" type="email" name="email" placeholder="email@email.com" />
+        <input className="input-field" type="password" name="password" placeholder="Password" />
+        <input className="input-field" type="password" name="confirm-password" placeholder="Confirm Password" />
+        <button className="submit-btn">Sign Up</button>
       </div>
     </div>
   );
