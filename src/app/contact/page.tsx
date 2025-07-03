@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HomeNavbar from "@/components/layout/homeNavbar";
-import { Roboto,Inter,Montserrat } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
  
 const inter = Montserrat({
   weight: '400',
