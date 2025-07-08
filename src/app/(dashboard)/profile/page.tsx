@@ -4,9 +4,10 @@ import Image from "next/image";
 import { Montserrat } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import ProfileHeader from '@/components/layout/profileHeader';
 import { User } from '@/types/User';
 import { Providers } from '@/app/providers';
+import { getUser } from '@/lib/queries/Users/getUser';
+import DashboardLayout from '@/components/layout/dashboardLayout';
 
 const inter = Montserrat({
   weight: '400',
@@ -15,26 +16,32 @@ const inter = Montserrat({
 
 
 export default async function DashboardPage() {
+
   console.log('profile page rendered')
+
+  // get session data and decrypt it
   const cookieStore = await cookies();
   const session: string | undefined = cookieStore.get('session')?.value;
-  const dc = session !== undefined ? await decrypt(session) : undefined;
-  const decrypted = dc !== undefined ? JSON.parse(dc) : undefined;
-  const token = decrypted?.token;
+  const decrypted_session = session !== undefined ? await decrypt(session) : undefined;
+  const user_data = decrypted_session !== undefined ? JSON.parse(decrypted_session) : undefined;
+  const token = user_data?.token;
+
+  // redirect if no auth token
   if (!token) {
     redirect('/sign-in');
   }
-  const username = decrypted?.username;
-  const id = decrypted?.user_id;
 
+  const id = user_data?.user_id;
+  const userDetails = await getUser(id, token);
+  // console.log(userDetails)
+  const username = userDetails.success ? userDetails?.data?.username : "";
+
+  //persist session state on refresh for client side
   const user: User = { token, username, id };
-
 
   return (
     <Providers user={user}>
-      <div>
-        <ProfileHeader />
-      </div>
+      <DashboardLayout/>
     </Providers>
   );
 }
