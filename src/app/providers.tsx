@@ -1,10 +1,19 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
+import { Provider } from 'react-redux';
+import { makeStore } from '@/store/store';
+import { User } from '@/types/User';
+import { setUser } from '@/store/slices/userSlice';
 
-export function Providers({ children }: { children: ReactNode }) {
-  const [client] = useState(() => new QueryClient());
 
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+const store = makeStore();
+
+export function Providers({ children,user }: { children: ReactNode, user: User }) {
+
+  if (user?.token) {
+    store.dispatch(setUser(user));
+  }
+
+  return <Provider store={store}>{children}</Provider>;
 }

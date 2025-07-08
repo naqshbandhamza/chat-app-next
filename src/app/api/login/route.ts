@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import { serialize } from 'cookie'
+import { encrypt } from '@/lib/session' // Your custom encryption function
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,15 +14,19 @@ export async function POST(req: NextRequest) {
       { withCredentials: true }
     );
 
-    //console.log(loginRes)
+    const sdata = { "username": loginRes.data.username, "user_id": loginRes.data.user_id, "token": loginRes.data.token}
+
+    let enc = await encrypt(JSON.stringify(sdata));
+    const cookie = serialize('session', enc, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24 * 7, // One week
+      path: '/',
+    })
 
     // Forward cookie from Django backend if any
-    const response = NextResponse.json({ success: true, data: { user_id: loginRes.data.user_id, username: loginRes.data.username } });
-    const cookieHeader = loginRes.headers['set-cookie'];
-
-    if (cookieHeader) {
-      response.headers.set('Set-Cookie', cookieHeader.toString());
-    }
+    const response = NextResponse.json({ success: true });
+    response.headers.set('Set-Cookie', cookie)
 
     return response;
   } catch (error: any) {

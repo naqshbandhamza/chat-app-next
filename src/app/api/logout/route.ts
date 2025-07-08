@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
     try {
         // Forward cookie from Django backend if any
         const response = NextResponse.json({ success: true });
-        response.headers.set('Set-Cookie', 'access_token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure');
+        response.headers.set('Set-Cookie', 'session=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure');
         return response;
     } catch (error: any) {
         console.error('Login error:', error);

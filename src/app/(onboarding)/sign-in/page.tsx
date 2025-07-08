@@ -5,6 +5,8 @@ import HomeNavbar from "@/components/layout/homeNavbar";
 import { Montserrat } from 'next/font/google';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { setUser } from '@/store/slices/userSlice';
+
 
 const inter = Montserrat({
   weight: '400',
@@ -12,6 +14,7 @@ const inter = Montserrat({
 });
 
 export default function SignIn() {
+  console.log("login rendered")
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -36,10 +39,9 @@ export default function SignIn() {
         throw new Error(err.message || 'Login failed');
       }
 
-      const data = await res.json();
-      console.log(data)
-      // Optional: redirect on success
-      router.push('/profile') //if using next/navigation
+      const cuser = await res.json();
+
+      router.push('/profile')
     } catch (err: any) {
       setError(err.message);
     } finally {
