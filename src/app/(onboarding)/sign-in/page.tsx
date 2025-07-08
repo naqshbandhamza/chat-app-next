@@ -3,10 +3,8 @@
 import Image from "next/image";
 import HomeNavbar from "@/components/layout/homeNavbar";
 import { Montserrat } from 'next/font/google';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { setUser } from '@/store/slices/userSlice';
-
 
 const inter = Montserrat({
   weight: '400',
@@ -14,20 +12,26 @@ const inter = Montserrat({
 });
 
 export default function SignIn() {
-  console.log("login rendered")
+  console.log("login rendered");
+
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
     setError('');
+
+    const username = usernameRef.current?.value || '';
+    const password = passwordRef.current?.value || '';
+
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
-        credentials: 'include', // sends cookies with request
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -41,7 +45,10 @@ export default function SignIn() {
 
       const cuser = await res.json();
 
-      router.push('/profile')
+      // Optionally dispatch to Redux
+      // dispatch(setUser(cuser));
+
+      router.push('/profile');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -53,30 +60,27 @@ export default function SignIn() {
     <div
       className={`relative h-screen w-full bg-[#FFFFFF] overflow-hidden ${inter.className}`}
       style={{
-        background:
-          "linear-gradient(90deg, #3B41C5 0%, #A981BB 49%, #FFC8A9 100%)",
+        background: "linear-gradient(90deg, #3B41C5 0%, #A981BB 49%, #FFC8A9 100%)",
       }}
     >
       <HomeNavbar />
       <h1 className="text-white text-center mt-[20px] mb-[60px] font-bold text-3xl">
         Sign In to Our Chat App
       </h1>
-      <div className="w-[420px] h-auto shadow-md mx-auto mt-[20px] text-gray-900  rounded-3xl overflow-hidden  bg-[#ffffff]">
+      <div className="w-[420px] h-auto shadow-md mx-auto mt-[20px] text-gray-900 rounded-3xl overflow-hidden bg-[#ffffff]">
         <input
           className="input-field mt-[40px]"
           type="text"
           name="username"
           placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          ref={usernameRef}
         />
         <input
           className="input-field"
           type="password"
           name="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          ref={passwordRef}
         />
         <button
           className={`submit-btn bg-[#3B41C5] border-none`}
