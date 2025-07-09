@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { User } from '@/types/User';
 import { Providers } from '@/app/providers';
 import { getUser } from '@/lib/queries/Users/getUser';
+import { getCurrentUserChats } from '@/lib/queries/Users/getCurrentUserChats';
 import DashboardLayout from '@/components/layout/dashboardLayout';
 
 const inter = Montserrat({
@@ -33,14 +34,15 @@ export default async function DashboardPage() {
 
   const id = user_data?.user_id;
   const userDetails = await getUser(id, token);
-  // console.log(userDetails)
+  const currentChats = await getCurrentUserChats(token);
+  // console.log(currentChats)
   const username = userDetails.success ? userDetails?.data?.username : "";
 
   //persist session state on refresh for client side
-  const user: User = { token, username, id };
+  const user: User = { "token": null, "username": username, "id": id };
 
   return (
-    <Providers user={user}>
+    <Providers user={user} currentChats={currentChats}>
       <DashboardLayout />
     </Providers>
   );

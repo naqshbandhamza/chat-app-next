@@ -3,7 +3,7 @@ import { User } from '@/types/User';
 
 const initialState: User = {
   id: null,
-  username: 'target Username',
+  username: null,
   token: null,
 };
 

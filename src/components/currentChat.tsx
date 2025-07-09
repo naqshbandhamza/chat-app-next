@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Roboto, Inter, Montserrat } from 'next/font/google'
 import { User } from '@/types/User';
 import { useSelector, useDispatch } from 'react-redux';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 
 const inter = Montserrat({
@@ -48,14 +48,65 @@ function ChatInput() {
 export default function MainChat() {
 
     console.log("Main Chat Rendered")
+    const chatid: any = useSelector((state: any) => state.selectedChat.id);
+    const { username } = useSelector((state: any) => state.user);
+    const [messages, setMessages] = React.useState([]);
 
-    const userid: any = useSelector((state: any) => state.user.id);
-    const token: any = useSelector((state: any) => state.user.token);
+    const getChatDetails = async (chatId: string) => {
+        try {
+            const res = await fetch('/api/chatdetails', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ chatId }),
+            });
 
-    console.log(userid, token);
+            const response = await res.json();
+            console.log(response)
+            setMessages(response.data.messages)
+
+        } catch (err: any) {
+        } finally {
+        }
+    }
+
+    React.useEffect(() => {
+        console.log(chatid)
+        if (chatid !== null) {
+            getChatDetails(chatid)
+        }
+    }, [chatid])
 
     return (
         <div className='h-[90%] w-[100%] text-gray-900 relative bg-[#ECECFF]'>
+            <div className="w-full px-4 py-6 rounded-lg h-[80vh] overflow-y-auto space-y-4">
+                {messages.map((msg: any) => {
+                    const isOwn = msg.sender_username === username;
+                    return (
+                        <div
+                            key={msg.message_id}
+                            className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                        >
+                            <div
+                                className={`rounded-2xl px-4 py-3 max-w-[75%] text-sm ${isOwn
+                                    ? 'bg-blue-500 text-white rounded-br-none'
+                                    : 'bg-gray-200 text-gray-800 rounded-bl-none'
+                                    }`}
+                            >
+                                <div className="font-semibold text-xs mb-1">
+                                    {msg.sender_username}
+                                </div>
+                                <div>{msg.content}</div>
+                                <div className="text-[10px] mt-1 text-right text-gray-300">
+                                    {/* {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} */}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
             <ChatInput />
         </div>
     )

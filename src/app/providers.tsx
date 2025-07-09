@@ -5,14 +5,17 @@ import { Provider } from 'react-redux';
 import { makeStore } from '@/store/store';
 import { User } from '@/types/User';
 import { setUser } from '@/store/slices/userSlice';
+import { setChats } from '@/store/slices/chatSlice';
+import React from 'react';
 
 
 const store = makeStore();
 
-export function Providers({ children,user }: { children: ReactNode, user: User }) {
+export function Providers({ children, user, currentChats }: { children: ReactNode, user: User, currentChats: any }) {
 
-  if (user?.token) {
+  if (user?.id) {
     store.dispatch(setUser(user));
+    store.dispatch(setChats(currentChats));
   }
 
   return <Provider store={store}>{children}</Provider>;
