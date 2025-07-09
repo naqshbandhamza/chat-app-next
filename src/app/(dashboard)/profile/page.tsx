@@ -41,7 +41,7 @@ export default async function DashboardPage() {
 
   return (
     <Providers user={user}>
-      <DashboardLayout/>
+      <DashboardLayout />
     </Providers>
   );
 }

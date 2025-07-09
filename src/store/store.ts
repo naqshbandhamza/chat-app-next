@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { userSlice } from './slices/userSlice'; // Adjust path as needed
+import { targetUserSlice } from './slices/targetUserSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       user: userSlice.reducer,
+      targetUser:targetUserSlice.reducer
     }
   })
 }

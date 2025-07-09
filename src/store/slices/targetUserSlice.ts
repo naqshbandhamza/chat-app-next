@@ -3,15 +3,15 @@ import { User } from '@/types/User';
 
 const initialState: User = {
   id: null,
-  username: null,
+  username: 'target Username',
   token: null,
 };
 
-export const userSlice = createSlice({
-  name: 'user',
+export const targetUserSlice = createSlice({
+  name: 'targetUser',
   initialState,
   reducers: {
-    setUser: (
+    setTargetUser: (
       state,
       action: PayloadAction<User>
     ) => {
@@ -19,7 +19,7 @@ export const userSlice = createSlice({
       state.username = action.payload.username;
       state.token = action.payload.token;
     },
-    clearUser: (state) => {
+    clearTargetUser: (state) => {
       state.id = null;
       state.username = null;
       state.token = null;
@@ -27,5 +27,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { setTargetUser, clearTargetUser } = targetUserSlice.actions;
+export default targetUserSlice.reducer;
