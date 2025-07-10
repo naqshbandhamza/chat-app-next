@@ -2,6 +2,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Chat } from '@/types/chatTypes';
+import { Message } from '@/types/chatTypes';
 
 interface ChatState {
   chats: Chat[];
@@ -33,8 +34,26 @@ export const chatSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    updateChats(state, action: PayloadAction<Message>) {
+      const newMessage = action.payload;
+
+      // Find the index of the chat this message belongs to
+      const chatIndex = state.chats.findIndex(chat => chat.chat_id === newMessage.chat);
+      console.log(chatIndex)
+
+      if (chatIndex !== -1) {
+        // Update latest_message
+        state.chats[chatIndex].latest_message = newMessage;
+
+        // Move chat to the top of the list
+        const updatedChat = state.chats.splice(chatIndex, 1)[0];
+        state.chats.unshift(updatedChat);
+      } else {
+        console.warn('Chat not found for message:', newMessage.chat);
+      }
+    },
   },
 });
 
-export const { setChats, setLoading, setError, clearChats } = chatSlice.actions;
+export const { setChats, setLoading, setError, clearChats, updateChats } = chatSlice.actions;
 export default chatSlice.reducer;

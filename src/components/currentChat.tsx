@@ -5,14 +5,15 @@ import { Roboto, Inter, Montserrat } from 'next/font/google'
 import { User } from '@/types/User';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useRef } from 'react';
-
+import { Message } from '@/types/chatTypes';
+import { updateChats } from '@/store/slices/chatSlice';
 
 const inter = Montserrat({
     weight: '400',
     subsets: ['latin'],
 })
 
-function ChatInput() {
+function ChatInput({id,chatid,MessageSentSuccessfully}:{id:number,chatid:number,MessageSentSuccessfully:any}) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const textareaContainerRef = useRef<HTMLDivElement>(null);
 
@@ -26,6 +27,34 @@ function ChatInput() {
             divtext.style.height = `${Math.min(textarea.scrollHeight + 20, 340)}px`; // Max height = 340px
         }
     };
+    
+    const handleMessageSend = async () =>{
+        const content = textareaRef?.current?.value;
+        const tosend = {"sender":id,"chat":chatid,content};
+
+
+        try {
+            const res = await fetch('/api/send-message', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tosend),
+            });
+
+            const response = await res.json();
+
+            if(response.success){
+                MessageSentSuccessfully(response.data)
+            }
+
+        } catch (err: any) {
+        } finally {
+        }
+
+
+    }
 
     return (
         <div className="absolute bottom-0 left-0 w-full min-h-[110px] bg-[#F1F1F1]"
@@ -38,7 +67,9 @@ function ChatInput() {
                 className="absolute w-[85%] min-h-[60px] max-h-[300px] overflow-y-auto border border-solid border-[#E6E6E6] right-[20px] top-[10px] rounded-[24px] p-[20px] resize-none"
             >
             </textarea>
-            <button className='w-10 h-10 rounded-[50%]  absolute bottom-[25px] right-[35px]' onClick={() => alert("message sent")}>
+            <button className='w-10 h-10 rounded-[50%]  absolute bottom-[25px] right-[35px]' onClick={()=>{
+                handleMessageSend();
+            }}>
                 <Image src="/icons/send.svg" alt="Send" width={20} height={20} className='m-auto' />
             </button>
         </div>
@@ -47,10 +78,11 @@ function ChatInput() {
 
 export default function MainChat() {
 
+    const dispatch = useDispatch();
     console.log("Main Chat Rendered")
-    const chatid: any = useSelector((state: any) => state.selectedChat.id);
-    const { username } = useSelector((state: any) => state.user);
-    const [messages, setMessages] = React.useState([]);
+    const chatid: string = useSelector((state: any) => state.selectedChat.id);
+    const { username,id } = useSelector((state: any) => state.user);
+    const [messages, setMessages] = React.useState<Message[]>([]);
 
     const getChatDetails = async (chatId: string) => {
         try {
@@ -79,9 +111,14 @@ export default function MainChat() {
         }
     }, [chatid])
 
+    const MessageSentSuccessfully = (data:Message) =>{
+        dispatch(updateChats(data))
+        setMessages([...messages,data])
+    }
+
     return (
         <div className='h-[90%] w-[100%] text-gray-900 relative bg-[#ECECFF]'>
-            <div className="w-full px-4 py-6 rounded-lg h-[80vh] overflow-y-auto space-y-4">
+            <div className="w-full px-4 py-6 rounded-lg h-[80vh] overflow-y-auto space-y-4 pb-[80px]">
                 {messages.map((msg: any) => {
                     const isOwn = msg.sender_username === username;
                     return (
@@ -107,7 +144,7 @@ export default function MainChat() {
                     );
                 })}
             </div>
-            <ChatInput />
+            <ChatInput id={id} chatid={parseInt(chatid)} MessageSentSuccessfully={MessageSentSuccessfully} />
         </div>
     )
 }

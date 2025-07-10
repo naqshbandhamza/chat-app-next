@@ -35,14 +35,14 @@ export default async function DashboardPage() {
   const id = user_data?.user_id;
   const userDetails = await getUser(id, token);
   const currentChats = await getCurrentUserChats(token);
-  // console.log(currentChats)
+  console.log(currentChats)
   const username = userDetails.success ? userDetails?.data?.username : "";
 
   //persist session state on refresh for client side
   const user: User = { "token": null, "username": username, "id": id };
 
   return (
-    <Providers user={user} currentChats={currentChats}>
+    <Providers user={user} currentChats={currentChats.data}>
       <DashboardLayout />
     </Providers>
   );

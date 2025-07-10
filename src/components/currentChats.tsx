@@ -19,7 +19,7 @@ export default function Chats() {
     const dispatch = useDispatch();
     console.log("Chats list Rendered")
     const { username } = useSelector((state: any) => state.user);
-    const chats: Chat[] = useSelector((state: any) => state.chats.chats.data);
+    const chats: Chat[] = useSelector((state: any) => state.chats.chats);
 
     console.log(username, chats);
 

@@ -3,7 +3,11 @@ import Link from 'next/link'
 import { Roboto, Inter, Montserrat } from 'next/font/google'
 import { User } from '@/types/User';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { useRouter } from 'next/navigation';
+import { clearUser } from '@/store/slices/userSlice';
+import { clearTargetUser } from '@/store/slices/targetUserSlice';
+import { resetChatId } from '@/store/slices/selectedChat';
+import { clearChats } from '@/store/slices/chatSlice';
 
 const inter = Montserrat({
     weight: '400',
@@ -12,6 +16,9 @@ const inter = Montserrat({
 
 
 export default function ProfileHeader({ variation }: { variation: string }) {
+
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     if (variation === "source")
         console.log("profile header logged in user rendered")
@@ -22,6 +29,34 @@ export default function ProfileHeader({ variation }: { variation: string }) {
         return variation === "source" ? state.user : state.targetUser
     });
 
+    const handleLogout = async () => {
+        try {
+            const res = await fetch('/api/logout', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+
+            const ress = await res.json();
+            console.log(ress)
+
+            if (ress.success) {
+                dispatch(clearUser())
+                dispatch(clearTargetUser())
+                dispatch(resetChatId())
+                dispatch(clearChats())
+                router.push('/sign-in')
+            }
+
+        } catch (err: any) {
+        } finally {
+        }
+    }
+
+
+
     return (
         <div className={`relative w-full h-[10%] bg-[#F1F1F1] text-gray-800 text-[14px] overflow-hidden border-b border-b-solid border-b-[#E6E6E6] ${inter.className}`}>
             {username !== null && (
@@ -30,6 +65,11 @@ export default function ProfileHeader({ variation }: { variation: string }) {
                     <p className='text-gray-800 text-[18px] inline-block font-bold mt-[4px] ml-[5px]'> {username}</p>
                     <div className='text-gray-800 text-[12px] inline-block absolute bottom-[0px] left-[71px]'> <div className='w-[10px] h-[10px] rounded-[50%] bg-[#68d391] absolute bottom-[3px] left-[-16px]'></div> online</div>
                 </div>)}
+            {variation === "source" && (
+                <button className='absolute right-[10px] top-[26px]' onClick={() => {
+                    handleLogout()
+                }}>logout</button>
+            )}
         </div>
     )
 }

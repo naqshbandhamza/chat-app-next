@@ -6,12 +6,13 @@ import { makeStore } from '@/store/store';
 import { User } from '@/types/User';
 import { setUser } from '@/store/slices/userSlice';
 import { setChats } from '@/store/slices/chatSlice';
+import { Chat } from '@/types/chatTypes';
 import React from 'react';
 
 
 const store = makeStore();
 
-export function Providers({ children, user, currentChats }: { children: ReactNode, user: User, currentChats: any }) {
+export function Providers({ children, user, currentChats }: { children: ReactNode, user: User, currentChats: Chat[] }) {
 
   if (user?.id) {
     store.dispatch(setUser(user));
