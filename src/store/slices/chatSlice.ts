@@ -52,8 +52,12 @@ export const chatSlice = createSlice({
         console.warn('Chat not found for message:', newMessage.chat);
       }
     },
+    appendChat(state, action: PayloadAction<Chat>) {
+      const newChat = action.payload;
+      state.chats = [...state.chats,newChat]
+    },
   },
 });
 
-export const { setChats, setLoading, setError, clearChats, updateChats } = chatSlice.actions;
+export const { setChats, setLoading, setError, clearChats, updateChats,appendChat } = chatSlice.actions;
 export default chatSlice.reducer;

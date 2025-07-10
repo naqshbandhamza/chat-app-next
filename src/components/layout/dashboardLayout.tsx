@@ -3,6 +3,8 @@ import { Roboto, Inter, Montserrat } from 'next/font/google'
 import ProfileHeader from '@/components/layout/profileHeader';
 import MainChat from '../currentChat';
 import Chats from '../currentChats';
+import NewChat from '../newChat';
+
 export default function DashboardLayout() {
 
   console.log("dashboard layout rendered 101")
@@ -12,6 +14,7 @@ export default function DashboardLayout() {
         <div className="col-span-3 relative bg-[#F1F1F1] border border-solid border-[#E6E6E6]">
           <ProfileHeader variation={"source"} />
           <Chats/>
+          <NewChat/>
         </div>
         <div className="col-span-7 relative bg-[#F1F1F1] overflow-hidden">
           <ProfileHeader variation={"destination"} />
