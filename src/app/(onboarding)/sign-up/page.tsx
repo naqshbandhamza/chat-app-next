@@ -37,6 +37,12 @@ export default function SignUp() {
     const password = passwordRef.current?.value;
     const confirmPassword = confirmPasswordRef.current?.value;
 
+    if(firstname?.trim()==="" || lastname?.trim()===""){
+      setLoading(false)
+      setError("name fields cannot be empty")
+      return;
+    }
+
     if(confirmPassword!==password)
     {
       setLoading(false)
@@ -63,7 +69,7 @@ export default function SignUp() {
         router.push('/sign-in');
 
       console.log(res_json)
-      setError("Sign Up Failed")
+      setError(res_json.message)
       setLoading(false)
     } catch (err: any) {
       setLoading(false)

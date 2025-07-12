@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error: any) {
-    console.error('Login error:', error);
-    return NextResponse.json({ success: false, message: 'Sign Up failed' }, { status: 401 });
+    console.error('Login error:', error.response);
+    return NextResponse.json({ success: false, message: error?.response?.data?.error? error.response.data.error:'Sign Up failed' }, { status: 401 });
   }
 }

@@ -10,6 +10,7 @@ import { appendChat } from '@/store/slices/chatSlice';
 import { setChatId } from '@/store/slices/selectedChat';
 import { setTargetUser } from '@/store/slices/targetUserSlice';
 import Modal from '@/components/ui/modal';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const inter = Montserrat({
@@ -18,6 +19,8 @@ const inter = Montserrat({
 })
 
 export default function NewChat() {
+
+    const notify = (msg: string) => toast(msg);
 
     const dispatch = useDispatch();
     console.log("New Chat Rendered")
@@ -31,6 +34,11 @@ export default function NewChat() {
         const target_username = usernameRef?.current?.value;
         const message = textareaRef?.current?.value;
 
+        if(target_username?.trim()==="" || message?.trim()===""){
+            notify("username and message cannot be empty");
+            return;
+        }
+
         try {
             const res = await fetch('/api/createnewchat', {
                 method: 'POST',
@@ -42,6 +50,12 @@ export default function NewChat() {
             });
 
             const response = await res.json();
+
+            if(!response.success){
+                notify(response.message)
+                return;
+            }
+
             const { messages, ...rest } = response.data.chat; // assuming 'chat' is the key
 
             let net_result = {
@@ -103,7 +117,18 @@ export default function NewChat() {
                     </div>
                 </div>
             </Modal>
-
+             <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick={false}
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                        />
         </>
     )
 }

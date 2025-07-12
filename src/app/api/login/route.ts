@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       { withCredentials: true }
     );
 
-    const sdata = { "username": loginRes.data.username, "user_id": loginRes.data.user_id, "token": loginRes.data.token}
+    const sdata = { "username": loginRes.data.username, "user_id": loginRes.data.user_id, "token": loginRes.data.token }
 
     let enc = await encrypt(JSON.stringify(sdata));
     const cookie = serialize('session', enc, {
@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error: any) {
-    console.error('Login error:', error);
-    return NextResponse.json({ success: false, message: 'Login failed' }, { status: 401 });
+
+    return NextResponse.json({ success: false, message: error?.response?.data?.password ? error.response.data.password : 'invalid credentials' }, { status: 401 });
+    
   }
 }

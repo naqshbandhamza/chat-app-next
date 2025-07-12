@@ -45,9 +45,6 @@ export default function SignIn() {
 
       const cuser = await res.json();
 
-      // Optionally dispatch to Redux
-      // dispatch(setUser(cuser));
-
       router.push('/profile');
     } catch (err: any) {
       setError(err.message);

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
         return response;
     } catch (error: any) {
-        console.error('Login error:', error);
-        return NextResponse.json({ success: false, message: 'Login failed' }, { status: 401 });
+        console.error('Login error:', error.response);
+        return NextResponse.json({ success: false, message: error?.response?.data?.error? error.response.data.error: 'failed to create chat' }, { status: 401 });
     }
 }

@@ -7,15 +7,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import React, { useRef } from 'react';
 import { Message } from '@/types/chatTypes';
 import { updateChats } from '@/store/slices/chatSlice';
+import { ToastContainer, toast } from 'react-toastify';
 
 const inter = Montserrat({
     weight: '400',
     subsets: ['latin'],
 })
 
-function ChatInput({id,chatid,MessageSentSuccessfully}:{id:number,chatid:number,MessageSentSuccessfully:any}) {
+function ChatInput({ id, chatid, MessageSentSuccessfully }: { id: number, chatid: number, MessageSentSuccessfully: any }) {
+
+    const notify = (msg: string) => toast(msg);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const textareaContainerRef = useRef<HTMLDivElement>(null);
+
+    console.log(chatid)
 
     const handleInput = () => {
         const textarea = textareaRef.current;
@@ -27,10 +32,16 @@ function ChatInput({id,chatid,MessageSentSuccessfully}:{id:number,chatid:number,
             divtext.style.height = `${Math.min(textarea.scrollHeight + 20, 340)}px`; // Max height = 340px
         }
     };
-    
-    const handleMessageSend = async () =>{
+
+    const handleMessageSend = async () => {
         const content = textareaRef?.current?.value;
-        const tosend = {"sender":id,"chat":chatid,content};
+
+        if (content?.trim() === "") {
+            notify("message cannot be empty")
+            return;
+        }
+
+        const tosend = { "sender": id, "chat": chatid, content };
 
 
         try {
@@ -45,7 +56,7 @@ function ChatInput({id,chatid,MessageSentSuccessfully}:{id:number,chatid:number,
 
             const response = await res.json();
 
-            if(response.success){
+            if (response.success) {
                 MessageSentSuccessfully(response.data)
             }
 
@@ -60,18 +71,34 @@ function ChatInput({id,chatid,MessageSentSuccessfully}:{id:number,chatid:number,
         <div className="absolute bottom-0 left-0 w-full min-h-[110px] bg-[#F1F1F1]"
             ref={textareaContainerRef}
         >
-            <textarea
-                ref={textareaRef}
-                onInput={handleInput}
-                placeholder="Type your message here..."
-                className="absolute w-[85%] min-h-[60px] max-h-[300px] overflow-y-auto border border-solid border-[#E6E6E6] right-[20px] top-[10px] rounded-[24px] p-[20px] resize-none"
-            >
-            </textarea>
-            <button className='w-10 h-10 rounded-[50%]  absolute bottom-[25px] right-[35px]' onClick={()=>{
-                handleMessageSend();
-            }}>
-                <Image src="/icons/send.svg" alt="Send" width={20} height={20} className='m-auto' />
-            </button>
+            {chatid !== null && !Number.isNaN(chatid) && (
+                <>
+                    <textarea
+                        ref={textareaRef}
+                        onInput={handleInput}
+                        placeholder="Type your message here..."
+                        className="absolute w-[85%] min-h-[60px] max-h-[300px] overflow-y-auto border border-solid border-[#E6E6E6] right-[20px] top-[10px] rounded-[24px] p-[20px] resize-none"
+                    >
+                    </textarea>
+                    <button className='w-10 h-10 rounded-[50%]  absolute bottom-[25px] right-[35px]' onClick={() => {
+                        handleMessageSend();
+                    }}>
+                        <Image src="/icons/send.svg" alt="Send" width={20} height={20} className='m-auto' />
+                    </button>
+                </>
+            )}
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     );
 }
@@ -81,7 +108,7 @@ export default function MainChat() {
     const dispatch = useDispatch();
     console.log("Main Chat Rendered")
     const chatid: string = useSelector((state: any) => state.selectedChat.id);
-    const { username,id } = useSelector((state: any) => state.user);
+    const { username, id } = useSelector((state: any) => state.user);
     const [messages, setMessages] = React.useState<Message[]>([]);
 
     const getChatDetails = async (chatId: string) => {
@@ -100,6 +127,7 @@ export default function MainChat() {
             setMessages(response.data.messages)
 
         } catch (err: any) {
+            alert('could not fetch chat details due to some problem')
         } finally {
         }
     }
@@ -111,9 +139,9 @@ export default function MainChat() {
         }
     }, [chatid])
 
-    const MessageSentSuccessfully = (data:Message) =>{
+    const MessageSentSuccessfully = (data: Message) => {
         dispatch(updateChats(data))
-        setMessages([...messages,data])
+        setMessages([...messages, data])
     }
 
     return (
