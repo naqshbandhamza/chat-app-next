@@ -7,6 +7,7 @@ export interface Message {
     sender: number | null;
     sender_username: string | null;
     chat:number;
+    read_by:number[]
   }
   
   export interface Participant {

@@ -20,7 +20,7 @@ function ChatInput({ id, chatid, MessageSentSuccessfully }: { id: number, chatid
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const textareaContainerRef = useRef<HTMLDivElement>(null);
 
-    console.log(chatid)
+    // console.log(chatid)
 
     const handleInput = () => {
         const textarea = textareaRef.current;
@@ -133,7 +133,7 @@ export default function MainChat() {
     }
 
     React.useEffect(() => {
-        console.log(chatid)
+        // console.log(chatid)
         if (chatid !== null) {
             getChatDetails(chatid)
         }
