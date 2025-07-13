@@ -36,7 +36,6 @@ export const chatSlice = createSlice({
     },
     updateChats(state, action: PayloadAction<Message>) {
       const newMessage = action.payload;
-
       // Find the index of the chat this message belongs to
       const chatIndex = state.chats.findIndex(chat => chat.chat_id === newMessage.chat);
       console.log(chatIndex)
@@ -52,6 +51,18 @@ export const chatSlice = createSlice({
         console.warn('Chat not found for message:', newMessage.chat);
       }
     },
+    updateChatsReadStatus(state, action: PayloadAction<any>) {
+      const to_check_user_id = action.payload.user_id;
+      const chatid = action.payload.chat_id;
+      // Find the index of the chat this message belongs to
+      const chatIndex = state.chats.findIndex(chat => chat.chat_id === chatid);
+
+      if (chatIndex !== -1) {
+        // Update latest_message
+        if(!state.chats[chatIndex].latest_message?.read_by.includes(to_check_user_id))
+            state.chats[chatIndex].latest_message?.read_by.push(to_check_user_id);
+      } 
+    },
     appendChat(state, action: PayloadAction<Chat>) {
       const newChat = action.payload;
       state.chats = [...state.chats,newChat]
@@ -59,5 +70,5 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { setChats, setLoading, setError, clearChats, updateChats,appendChat } = chatSlice.actions;
+export const { setChats, setLoading, setError, clearChats, updateChats,appendChat,updateChatsReadStatus } = chatSlice.actions;
 export default chatSlice.reducer;
