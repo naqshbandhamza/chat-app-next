@@ -3,22 +3,27 @@ import Link from 'next/link'
 import Image from 'next/image';
 import { Roboto, Inter, Montserrat } from 'next/font/google'
 import { User } from '@/types/User';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import React, { useRef } from 'react';
 import { Message } from '@/types/chatTypes';
-import { updateChats } from '@/store/slices/chatSlice';
 import { ToastContainer, toast } from 'react-toastify';
+import { useChatSocket } from '@/lib/hooks/socket';
 
 const inter = Montserrat({
     weight: '400',
     subsets: ['latin'],
 })
 
-function ChatInput({ id, chatid, MessageSentSuccessfully }: { id: number, chatid: number, MessageSentSuccessfully: any }) {
+function ChatInput({ id, chatid, username, MessageSentSuccessfully }: { id: number, chatid: number, username: string, MessageSentSuccessfully: any }) {
 
     const notify = (msg: string) => toast(msg);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const textareaContainerRef = useRef<HTMLDivElement>(null);
+
+    const { sendMessage } = useChatSocket(chatid.toString(), (data) => {
+        console.log(data)
+        MessageSentSuccessfully(data.latest_message)
+    });
 
     // console.log(chatid)
 
@@ -36,33 +41,36 @@ function ChatInput({ id, chatid, MessageSentSuccessfully }: { id: number, chatid
     const handleMessageSend = async () => {
         const content = textareaRef?.current?.value;
 
-        if (content?.trim() === "") {
-            notify("message cannot be empty")
-            return;
-        }
+        if (content !== undefined)
+            sendMessage(content, username, id.toString(), chatid.toString())
 
-        const tosend = { "sender": id, "chat": chatid, content };
+        // if (content?.trim() === "") {
+        //     notify("message cannot be empty")
+        //     return;
+        // }
+
+        // const tosend = { "sender": id, "chat": chatid, content };
 
 
-        try {
-            const res = await fetch('/api/send-message', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(tosend),
-            });
+        // try {
+        //     const res = await fetch('/api/send-message', {
+        //         method: 'POST',
+        //         credentials: 'include',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(tosend),
+        //     });
 
-            const response = await res.json();
+        //     const response = await res.json();
 
-            if (response.success) {
-                MessageSentSuccessfully(response.data)
-            }
+        //     if (response.success) {
+        //         MessageSentSuccessfully(response.data)
+        //     }
 
-        } catch (err: any) {
-        } finally {
-        }
+        // } catch (err: any) {
+        // } finally {
+        // }
 
 
     }
@@ -105,7 +113,6 @@ function ChatInput({ id, chatid, MessageSentSuccessfully }: { id: number, chatid
 
 export default function MainChat() {
 
-    const dispatch = useDispatch();
     console.log("Main Chat Rendered")
     const chatid: string = useSelector((state: any) => state.selectedChat.id);
     const { username, id } = useSelector((state: any) => state.user);
@@ -140,8 +147,8 @@ export default function MainChat() {
     }, [chatid])
 
     const MessageSentSuccessfully = (data: Message) => {
-        dispatch(updateChats(data))
-        setMessages([...messages, data])
+        console.log(data)
+        setMessages((prev) => [...prev, data])
     }
 
     return (
@@ -172,7 +179,7 @@ export default function MainChat() {
                     );
                 })}
             </div>
-            <ChatInput id={id} chatid={parseInt(chatid)} MessageSentSuccessfully={MessageSentSuccessfully} />
+            <ChatInput id={id} chatid={parseInt(chatid)} username={username} MessageSentSuccessfully={MessageSentSuccessfully} />
         </div>
     )
 }

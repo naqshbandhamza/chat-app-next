@@ -6,9 +6,9 @@ import { User } from '@/types/User';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { useRef } from 'react';
 import { Chat } from "@/types/chatTypes";
-import { setChatId } from '@/store/slices/selectedChat';
-import { setTargetUser } from '@/store/slices/targetUserSlice';
-import { updateChatsReadStatus } from '@/store/slices/chatSlice';
+import React from 'react';
+import ChatCard from './chatCard';
+
 
 const inter = Montserrat({
     weight: '400',
@@ -17,9 +17,8 @@ const inter = Montserrat({
 
 export default function Chats() {
 
-    const dispatch = useDispatch();
     console.log("Chats list Rendered")
-    const { username,id } = useSelector((state: any) => state.user);
+    const { username, id } = useSelector((state: any) => state.user);
     const chats: Chat[] = useSelector((state: any) => state.chats.chats);
 
     console.log(username, chats);
@@ -33,12 +32,14 @@ export default function Chats() {
                         .map((p) => p.username);
 
                     return (
-                        <div
+                        <>
+                        <ChatCard chat={chat} id={id} username={username} latest={latest} participantUsernames={participantUsernames}/>
+                        {/* <div
                             key={chat.chat_id}
                             className="p-4 bg-white shadow-md border border-gray-200 m-0"
                             onClick={() => {
-                                if(!chat.latest_message?.read_by.includes(id))
-                                    dispatch(updateChatsReadStatus({user_id:id,chat_id:chat.chat_id}))
+                                if (!chat.latest_message?.read_by.includes(id))
+                                    dispatch(updateChatsReadStatus({ user_id: id, chat_id: chat.chat_id }))
                                 dispatch(setChatId(chat.chat_id.toString()))
                                 let target_username = participantUsernames.includes(username) ? chat.creator_username : participantUsernames[0]
                                 dispatch(setTargetUser({ username: target_username, id: null, token: null }));
@@ -50,14 +51,12 @@ export default function Chats() {
                             <div className="flex justify-between text-sm text-gray-600 truncate">
                                 {latest?.content || "No messages yet"}
                                 {latest?.read_by && !latest.read_by.includes(id) && (
-                                    <span style={{display:"inline-block",width:"auto",padding:"5px",backgroundColor:"black",color:"white",borderRadius:"4px"}}>unread</span>
+                                    <span style={{ display: "inline-block", width: "auto", padding: "5px", backgroundColor: "black", color: "white", borderRadius: "4px" }}>unread</span>
                                 )}
-                                {/* <span>
-                                    {chat.created_at}
-                                </span> */}
                             </div>
 
-                        </div>
+                        </div> */}
+                        </>
                     );
                 })
             )}
