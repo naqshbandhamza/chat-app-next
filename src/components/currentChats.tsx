@@ -8,7 +8,8 @@ import { useRef } from 'react';
 import { Chat } from "@/types/chatTypes";
 import React from 'react';
 import ChatCard from './chatCard';
-
+import { useNotifcationSocket } from '@/lib/hooks/notificationSocket';
+import { appendChat } from '@/store/slices/chatSlice';
 
 const inter = Montserrat({
     weight: '400',
@@ -17,11 +18,26 @@ const inter = Montserrat({
 
 export default function Chats() {
 
+    const dispatch = useDispatch();
+
     console.log("Chats list Rendered")
     const { username, id } = useSelector((state: any) => state.user);
     const chats: Chat[] = useSelector((state: any) => state.chats.chats);
 
     console.log(username, chats);
+
+    const { sendMessage } = useNotifcationSocket(username, (data) => {
+        console.log(data)
+        // dispatch(updateChats(data.latest_message))
+        const { messages, ...rest } = data.data.chat.chat;
+
+        let net_result = {
+            ...rest, latest_message: messages[0]
+        }
+
+        dispatch(appendChat(net_result))
+        
+    });
 
     return (
         <div className="w-full max-w-xl mx-auto space-y-4">
@@ -33,8 +49,8 @@ export default function Chats() {
 
                     return (
                         <>
-                        <ChatCard chat={chat} id={id} username={username} latest={latest} participantUsernames={participantUsernames}/>
-                        {/* <div
+                            <ChatCard chat={chat} id={id} username={username} latest={latest} participantUsernames={participantUsernames} />
+                            {/* <div
                             key={chat.chat_id}
                             className="p-4 bg-white shadow-md border border-gray-200 m-0"
                             onClick={() => {
