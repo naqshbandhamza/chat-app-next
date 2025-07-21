@@ -9,8 +9,6 @@ const inter = Montserrat({
 
 const websiteLinks = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
 ]
 
 const websiteLinks1 = [
@@ -29,18 +27,18 @@ export default function HomeNavbar() {
                         key={'/'}
                         href={'/'}
                     >
-                        LOGO
+                        Chime
                     </Link>
             </div>
             <div className=' w-[300px] mx-auto mt-[44px] flex justify-between uppercase font-bold hidden md:flex'>
-                {websiteLinks.map((link) => (
+                {/* {websiteLinks.map((link) => (
                     <Link
                         key={link.href}
                         href={link.href}
                     >
                         {link.name}
                     </Link>
-                ))}
+                ))} */}
             </div>
             <div className='absolute  w-[160px] right-[24px] top-[44px] flex justify-between uppercase font-bold'>
                 {websiteLinks1.map((link) => (
