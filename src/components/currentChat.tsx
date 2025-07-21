@@ -3,11 +3,14 @@ import Link from 'next/link'
 import Image from 'next/image';
 import { Roboto, Inter, Montserrat } from 'next/font/google'
 import { User } from '@/types/User';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef } from 'react';
 import { Message } from '@/types/chatTypes';
 import { ToastContainer, toast } from 'react-toastify';
 import { useChatSocket } from '@/lib/hooks/socket';
+import { useReadStatusSocket } from '@/lib/hooks/readSocket';
+import { updateChatsReadStatus } from '@/store/slices/chatSlice';
+import { UseDispatch } from 'react-redux';
 
 const inter = Montserrat({
     weight: '400',
@@ -116,7 +119,19 @@ export default function MainChat() {
     console.log("Main Chat Rendered")
     const chatid: string = useSelector((state: any) => state.selectedChat.id);
     const { username, id } = useSelector((state: any) => state.user);
+
+    const dispatch = useDispatch();
     const [messages, setMessages] = React.useState<Message[]>([]);
+
+    const { sendChatReadStatus } = useReadStatusSocket(chatid !== null ? chatid.toString() : "", (data) => {
+        console.log(data)
+        if (data.status === "success") {
+            console.log('sending dispatch')
+            dispatch(updateChatsReadStatus({ user_id: id, chat_id: chatid !== null ? chatid : "" }))
+        }
+
+    });
+
 
     const getChatDetails = async (chatId: string) => {
         try {
@@ -149,6 +164,8 @@ export default function MainChat() {
     const MessageSentSuccessfully = (data: Message) => {
         console.log(data)
         setMessages((prev) => [...prev, data])
+        if (data.sender_username !== username)
+            sendChatReadStatus(chatid, id)
     }
 
     return (

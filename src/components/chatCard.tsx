@@ -8,7 +8,7 @@ import { useRef } from 'react';
 import { Chat } from "@/types/chatTypes";
 import { setChatId } from '@/store/slices/selectedChat';
 import { setTargetUser } from '@/store/slices/targetUserSlice';
-import { updateChatsReadStatus,updateChats } from '@/store/slices/chatSlice';
+import { updateChatsReadStatus, updateChats } from '@/store/slices/chatSlice';
 import React from 'react';
 import { useChatSocket } from '@/lib/hooks/socket';
 
@@ -25,7 +25,6 @@ export default function ChatCard({ chat, username, id, latest, participantUserna
         console.log(data)
         dispatch(updateChats(data.latest_message))
     });
-
 
     return (
         <div className="w-full max-w-xl mx-auto space-y-4">
@@ -46,9 +45,9 @@ export default function ChatCard({ chat, username, id, latest, participantUserna
                     </div>
                     <div className="flex justify-between text-sm text-gray-600 truncate">
                         {latest?.content || "No messages yet"}
-                        {/* {latest?.read_by && !latest.read_by.includes(id) && (
+                        {latest?.read_by && !latest.read_by.includes(id) && (
                             <span style={{ display: "inline-block", width: "auto", padding: "5px", backgroundColor: "black", color: "white", borderRadius: "4px" }}>unread</span>
-                        )} */}
+                        )}
                     </div>
 
                 </div>
