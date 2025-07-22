@@ -19,8 +19,7 @@ const websiteLinks1 = [
 export default function HomeNavbar() {
 
     return (
-        <div className={`relative w-full h-[120px] bg-[#ffffff] text-gray-800 text-[14px] overflow-hidden ${inter.className}`} 
-        style={{background: "linear-gradient(90deg, #3B41C5 0%, #A981BB 49%, #FFC8A9 100%)"}}
+        <div className={`relative w-full h-[120px] bg-[#f1f9fc] text-gray-800 text-[14px] overflow-hidden ${inter.className}`} 
         >
             <div className='absolute  w-auto left-[24px] top-[44px] uppercase font-bold'>
                     <Link

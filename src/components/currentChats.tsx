@@ -36,11 +36,11 @@ export default function Chats() {
         }
 
         dispatch(appendChat(net_result))
-        
+
     });
 
     return (
-        <div className="w-full max-w-xl mx-auto space-y-4">
+        <div className="w-full max-w-xl mx-auto space-y-4 bg-white">
             {chats !== undefined && (
                 chats.map((chat) => {
                     const latest = chat.latest_message;
@@ -48,31 +48,7 @@ export default function Chats() {
                         .map((p) => p.username);
 
                     return (
-                        <>
-                            <ChatCard chat={chat} id={id} username={username} latest={latest} participantUsernames={participantUsernames} />
-                            {/* <div
-                            key={chat.chat_id}
-                            className="p-4 bg-white shadow-md border border-gray-200 m-0"
-                            onClick={() => {
-                                if (!chat.latest_message?.read_by.includes(id))
-                                    dispatch(updateChatsReadStatus({ user_id: id, chat_id: chat.chat_id }))
-                                dispatch(setChatId(chat.chat_id.toString()))
-                                let target_username = participantUsernames.includes(username) ? chat.creator_username : participantUsernames[0]
-                                dispatch(setTargetUser({ username: target_username, id: null, token: null }));
-                            }}
-                        >
-                            <div className="font-semibold text-lg text-gray-800 truncate">
-                                {participantUsernames.includes(username) ? chat.creator_username : participantUsernames[0]}
-                            </div>
-                            <div className="flex justify-between text-sm text-gray-600 truncate">
-                                {latest?.content || "No messages yet"}
-                                {latest?.read_by && !latest.read_by.includes(id) && (
-                                    <span style={{ display: "inline-block", width: "auto", padding: "5px", backgroundColor: "black", color: "white", borderRadius: "4px" }}>unread</span>
-                                )}
-                            </div>
-
-                        </div> */}
-                        </>
+                        <ChatCard chat={chat} id={id} username={username} latest={latest} participantUsernames={participantUsernames} />
                     );
                 })
             )}

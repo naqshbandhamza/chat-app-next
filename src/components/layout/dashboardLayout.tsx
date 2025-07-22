@@ -5,18 +5,23 @@ import MainChat from '../currentChat';
 import Chats from '../currentChats';
 import NewChat from '../newChat';
 
+const inter = Montserrat({
+  weight: '400',
+  subsets: ['latin'],
+})
+
 export default function DashboardLayout() {
 
   console.log("dashboard layout rendered 101")
   return (
-    <div className="min-h-screen">
-      <div className="grid grid-cols-10 h-screen">
-        <div className="col-span-3 relative bg-[#F1F1F1] border border-solid border-[#E6E6E6]">
+    <div className={`min-h-screen ${inter.className}`}>
+      <div className="grid grid-cols-10 h-screen" id="div-bar">
+        <div className="col-span-3 relative bg-white border-r border-gray-100" id="left-bar">
           <ProfileHeader variation={"source"} />
-          <Chats/>
-          <NewChat/>
+          <Chats />
+          <NewChat />
         </div>
-        <div className="col-span-7 relative bg-[#F1F1F1] overflow-hidden">
+        <div className="col-span-7 relative bg-white overflow-hidden" id="right-bar">
           <ProfileHeader variation={"destination"} />
           <MainChat />
         </div>
@@ -24,3 +29,4 @@ export default function DashboardLayout() {
     </div>
   )
 }
+

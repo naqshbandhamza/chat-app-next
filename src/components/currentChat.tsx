@@ -79,7 +79,7 @@ function ChatInput({ id, chatid, username, MessageSentSuccessfully }: { id: numb
     }
 
     return (
-        <div className="absolute bottom-0 left-0 w-full min-h-[110px] bg-[#F1F1F1]"
+        <div className="absolute bottom-0 left-0 w-full min-h-[110px] bg-white"
             ref={textareaContainerRef}
         >
             {chatid !== null && !Number.isNaN(chatid) && (
@@ -169,28 +169,25 @@ export default function MainChat() {
     }
 
     return (
-        <div className='h-[90%] w-[100%] text-gray-900 relative bg-[#ECECFF]'>
+        <div className='h-[90%] w-[100%] text-gray-900 relative bg-[#f1f9fc]'>
             <div className="w-full px-4 py-6 rounded-lg h-[80vh] overflow-y-auto space-y-4 pb-[80px]">
                 {messages.map((msg: any) => {
                     const isOwn = msg.sender_username === username;
                     return (
                         <div
                             key={msg.message_id}
-                            className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                            className={`h-auto flex ${isOwn ? 'justify-end' : 'justify-start'}`}
                         >
                             <div
-                                className={`rounded-2xl px-4 py-3 max-w-[75%] text-sm ${isOwn
-                                    ? 'bg-blue-500 text-white rounded-br-none'
+                                className={`rounded-2xl px-4 py-3 max-w-[75%] h-auto text-sm ${isOwn
+                                    ? 'bg-[#17AEE5] text-white rounded-br-none'
                                     : 'bg-gray-200 text-gray-800 rounded-bl-none'
                                     }`}
                             >
                                 <div className="font-semibold text-xs mb-1">
                                     {msg.sender_username}
                                 </div>
-                                <div>{msg.content}</div>
-                                <div className="text-[10px] mt-1 text-right text-gray-300">
-                                    {/* {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} */}
-                                </div>
+                                <div className='h-auto'>{msg.content}</div>
                             </div>
                         </div>
                     );

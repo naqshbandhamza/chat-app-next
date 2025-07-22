@@ -55,14 +55,11 @@ export default function SignIn() {
 
   return (
     <div
-      className={`relative h-screen w-full bg-[#FFFFFF] overflow-hidden ${inter.className}`}
-      style={{
-        background: "linear-gradient(90deg, #3B41C5 0%, #A981BB 49%, #FFC8A9 100%)",
-      }}
+      className={`relative h-screen w-full bg-[#f1f9fc] overflow-hidden ${inter.className}`}
     >
       <HomeNavbar />
       <h1 className="text-white text-center mt-[20px] mb-[60px] font-bold text-3xl">
-        Sign In to Our Chat App
+        Sign In to Chime
       </h1>
       <div className="w-[420px] h-auto shadow-md mx-auto mt-[20px] text-gray-900 rounded-3xl overflow-hidden bg-[#ffffff]">
         <input
