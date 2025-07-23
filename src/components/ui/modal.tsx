@@ -23,12 +23,14 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       {isOpen && (
         <motion.div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+          style={{zIndex:"9999"}}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
+           style={{zIndex:"9999"}}
             className="bg-white text-black rounded-2xl p-6 shadow-2xl max-w-md w-full mx-4"
             initial={{ scale: 0.9, opacity: 0,y:-500 }}
             animate={{ scale: 1, opacity: 1,y:0 }}

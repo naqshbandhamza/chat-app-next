@@ -1260,4 +1260,9 @@ a:hover.back-to-top {
     #destination {
         margin-left: 66px;
     }
+
+    .logout-btn{
+        right:70px;
+        top:32px;
+    }
 }

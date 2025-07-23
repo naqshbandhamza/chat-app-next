@@ -78,7 +78,7 @@ export default function ProfileHeader({ variation }: { variation: string }) {
                     <div className='text-gray-800 text-[12px] inline-block absolute bottom-[0px] left-[71px]'> <div className='w-[10px] h-[10px] rounded-[50%] bg-[#68d391] absolute bottom-[3px] left-[-16px]'></div> online</div>
                 </div>)}
             {variation === "source" && (
-                <button className='absolute right-[10px] top-[26px]' onClick={() => {
+                <button className='absolute right-[10px] top-[26px] logout-btn' onClick={() => {
                     handleLogout()
                 }}>logout</button>
             )}

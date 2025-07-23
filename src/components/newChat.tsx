@@ -75,7 +75,9 @@ export default function NewChat() {
 
     return (
         <>
-            <button className='absolute bottom-[20px] right-[20px] text-gray-400 w-10 h-10 rounded-[50%]' onClick={() => {
+            <button className='absolute top-[26px] right-[20px] text-gray-400 w-10 h-10 rounded-[50%]' 
+              style={{zIndex:"9998"}}
+            onClick={() => {
                 setOpen(prev => !prev)
             }}>
                 <Image src="/icons/new-message.svg" alt="new message" width={20} height={20} className='m-auto' />

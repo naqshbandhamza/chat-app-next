@@ -19,13 +19,13 @@ export default function DashboardLayout() {
         <div className="col-span-3 relative bg-white border-r border-gray-100" id="left-bar">
           <ProfileHeader variation={"source"} />
           <Chats />
-          <NewChat />
         </div>
         <div className="col-span-7 relative bg-white overflow-hidden" id="right-bar">
           <ProfileHeader variation={"destination"} />
           <MainChat />
         </div>
       </div>
+      <NewChat />
     </div>
   )
 }

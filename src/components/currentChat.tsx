@@ -123,7 +123,7 @@ export default function MainChat() {
     const dispatch = useDispatch();
     const [messages, setMessages] = React.useState<Message[]>([]);
 
-    const { sendChatReadStatus } = useReadStatusSocket(chatid !== null ? chatid.toString() : "", (data) => {
+    const { sendChatReadStatus } = useReadStatusSocket(chatid !== null ? chatid.toString() : "test", (data) => {
         console.log(data)
         if (data.status === "success") {
             console.log('sending dispatch')
