@@ -19,7 +19,7 @@ export const useNotifcationSocket = (username: string, onMessage: (msg: any) => 
       };
 
       socket.onclose = () => {
-        console.log("WebSocket disconnected");
+        console.log(" notification WebSocket disconnected");
       };
 
       return () => {

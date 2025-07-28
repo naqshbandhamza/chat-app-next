@@ -20,7 +20,7 @@ export const useReadStatusSocket = (chatId: string, onMessage: (msg: any) => voi
       };
 
       socket.onclose = () => {
-        console.log("WebSocket disconnected");
+        console.log("read WebSocket disconnected");
       };
 
       return () => {
