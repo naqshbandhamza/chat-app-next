@@ -42,13 +42,13 @@ export default function Chats() {
     return (
         <div className="w-full max-w-xl mx-auto space-y-4 bg-white">
             {chats !== undefined && (
-                chats.map((chat) => {
+                chats.map((chat,indx) => {
                     const latest = chat.latest_message;
                     const participantUsernames = chat.participants
                         .map((p) => p.username);
 
                     return (
-                        <ChatCard chat={chat} id={id} username={username} latest={latest} participantUsernames={participantUsernames} />
+                        <ChatCard chat={chat} key={indx} id={id} username={username} latest={latest} participantUsernames={participantUsernames} />
                     );
                 })
             )}
