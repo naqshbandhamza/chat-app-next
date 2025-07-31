@@ -46,8 +46,12 @@ function ChatInput({ id, chatid, username, MessageSentSuccessfully }: { id: numb
     const handleMessageSend = async () => {
         const content = textareaRef?.current?.value;
 
-        if (content !== undefined)
+        if (content !== undefined){
             sendMessage(content, username, id.toString(), chatid.toString())
+            if(textareaRef?.current?.value){
+                textareaRef.current.value="";
+            }
+        }
 
         // if (content?.trim() === "") {
         //     notify("message cannot be empty")
