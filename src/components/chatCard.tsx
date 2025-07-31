@@ -10,7 +10,7 @@ import { setChatId } from '@/store/slices/selectedChat';
 import { setTargetUser } from '@/store/slices/targetUserSlice';
 import { updateChatsReadStatus, updateChats } from '@/store/slices/chatSlice';
 import React from 'react';
-import { useChatSocket } from '@/lib/hooks/socket';
+//import { useChatSocket } from '@/lib/hooks/socket';
 
 const inter = Montserrat({
     weight: '400',
@@ -21,10 +21,10 @@ export default function ChatCard({ chat, username, id, latest, participantUserna
 
     const dispatch = useDispatch();
 
-    const { sendMessage } = useChatSocket(chat.chat_id.toString(), (data) => {
-        console.log(data)
-        dispatch(updateChats(data.latest_message))
-    });
+    // const { sendMessage } = useChatSocket(chat.chat_id.toString(), (data) => {
+    //     console.log(data)
+    //     dispatch(updateChats(data.latest_message))
+    // });
 
     return (
         <>

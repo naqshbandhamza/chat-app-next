@@ -8,8 +8,10 @@ import { useRef } from 'react';
 import { Chat } from "@/types/chatTypes";
 import React from 'react';
 import ChatCard from './chatCard';
-import { useNotifcationSocket } from '@/lib/hooks/notificationSocket';
-import { appendChat } from '@/store/slices/chatSlice';
+// import { useNotifcationSocket } from '@/lib/hooks/notificationSocket';
+// import { appendChat } from '@/store/slices/chatSlice';
+// import { updateChats } from '@/store/slices/chatSlice';
+
 
 const inter = Montserrat({
     weight: '400',
@@ -26,23 +28,25 @@ export default function Chats() {
 
     console.log(username, chats);
 
-    const { sendMessage } = useNotifcationSocket(username, (data) => {
-        console.log(data)
-        // dispatch(updateChats(data.latest_message))
-        const { messages, ...rest } = data.data.chat.chat;
+    // const { sendMessage } = useNotifcationSocket(username, (data) => {
+    //     console.log(data)
 
-        let net_result = {
-            ...rest, latest_message: messages[0]
-        }
+    //     if (data?.latest_message) {
+    //         dispatch(updateChats(data.latest_message))
+    //     } else {
+    //         const { messages, ...rest } = data.data.chat.chat;
+    //         let net_result = {
+    //             ...rest, latest_message: messages[0]
+    //         }
+    //         dispatch(appendChat(net_result))
+    //     }
 
-        dispatch(appendChat(net_result))
-
-    });
+    // });
 
     return (
         <div className="w-full max-w-xl mx-auto space-y-4 bg-white">
             {chats !== undefined && (
-                chats.map((chat,indx) => {
+                chats.map((chat, indx) => {
                     const latest = chat.latest_message;
                     const participantUsernames = chat.participants
                         .map((p) => p.username);

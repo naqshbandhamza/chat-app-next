@@ -10,7 +10,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useChatSocket } from '@/lib/hooks/socket';
 import { useReadStatusSocket } from '@/lib/hooks/readSocket';
 import { updateChatsReadStatus } from '@/store/slices/chatSlice';
+import { useNotifcationSocket } from '@/lib/hooks/notificationSocket';
+import { appendChat } from '@/store/slices/chatSlice';
+import { updateChats } from '@/store/slices/chatSlice';
 import { UseDispatch } from 'react-redux';
+
 
 const inter = Montserrat({
     weight: '400',
@@ -27,8 +31,6 @@ function ChatInput({ id, chatid, username, MessageSentSuccessfully }: { id: numb
         console.log(data)
         MessageSentSuccessfully(data.latest_message)
     });
-
-    // console.log(chatid)
 
     const handleInput = () => {
         const textarea = textareaRef.current;
@@ -132,6 +134,21 @@ export default function MainChat() {
 
     });
 
+    const { sendMessage } = useNotifcationSocket(username, (data) => {
+        console.log(data)
+
+        if (data?.latest_message) {
+            dispatch(updateChats(data.latest_message))
+        } else {
+            const { messages, ...rest } = data.data.chat.chat;
+            let net_result = {
+                ...rest, latest_message: messages[0]
+            }
+            dispatch(appendChat(net_result))
+        }
+
+    });
+
 
     const getChatDetails = async (chatId: string) => {
         try {
@@ -193,7 +210,7 @@ export default function MainChat() {
                     );
                 })}
             </div>
-            <ChatInput id={id} chatid={parseInt(chatid)} username={username} MessageSentSuccessfully={MessageSentSuccessfully} />
+            <ChatInput id={id} chatid={parseInt(chatid)} username={username} MessageSentSuccessfully={MessageSentSuccessfully}  />
         </div>
     )
 }
