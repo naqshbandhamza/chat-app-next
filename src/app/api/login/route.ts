@@ -5,14 +5,19 @@ import { encrypt } from '@/lib/session' // Your custom encryption function
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("login route called")
     const body = await req.json();
     const { username, password } = body;
+
+    console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/chat/login/`)
 
     const loginRes: any = await axios.post(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/chat/login/`, // e.g. Django endpoint
       { username, password },
       { withCredentials: true }
     );
+
+    console.log(loginRes)
 
     const sdata = { "username": loginRes.data.username, "user_id": loginRes.data.user_id, "token": loginRes.data.token }
 
@@ -30,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error: any) {
-
+    console.log(error)
     return NextResponse.json({ success: false, message: error?.response?.data?.password ? error.response.data.password : 'invalid credentials' }, { status: 401 });
     
   }
