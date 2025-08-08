@@ -35,7 +35,6 @@ WORKDIR /app
 
 # Step 9: Set environment to production
 ENV NODE_ENV=production
-ENV HOST=0.0.0.0
 
 # Step 10: Copy only the necessary files from the builder stage
 # - Compiled `.next` build
@@ -46,9 +45,6 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/.next .next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
-
-COPY --from=builder /app/src ./src
-
 
 # Step 11: Expose port 3000 (Next.js default)
 EXPOSE 3000
